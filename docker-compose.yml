@@ -1,0 +1,18 @@
+services:
+  site:
+    image: "lipanski/docker-static-website:1.0.0"
+    volumes:
+      - ./:/home/static:Z
+    ports:
+      - 8223:3000
+
+  tester:
+    image: "cypress/included:8.7.0"
+    depends_on:
+      - site
+    volumes:
+      - ./:/e2e:Z
+    working_dir: /e2e
+    environment:
+      - CYPRESS_root_url=http://site:3000/
+    entrypoint: cypress run
